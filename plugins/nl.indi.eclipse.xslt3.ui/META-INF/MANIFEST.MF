@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: XSLT 3 UI
+Bundle-SymbolicName: nl.indi.eclipse.xslt3.ui;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: INDI
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Require-Bundle: nl.indi.eclipse.xslt3.core,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.swt,
+ org.eclipse.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.views,
+ org.eclipse.ui.workbench.texteditor
+Export-Package: nl.indi.eclipse.xslt3.ui.editor,
+ nl.indi.eclipse.xslt3.ui.outline,
+ nl.indi.eclipse.xslt3.ui.text
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            file-extensions="xsl,xslt"
+            id="nl.indi.eclipse.xslt3.contentType"
+            name="XSLT 3 stylesheet"
+            priority="high">
+      </content-type>
+   </extension>
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            class="nl.indi.eclipse.xslt3.ui.editor.XsltTextEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="true"
+            extensions="xsl,xslt"
+            id="nl.indi.eclipse.xslt3.ui.editor"
+            name="XSLT 3 Editor">
+      </editor>
+   </extension>
+</plugin>
+

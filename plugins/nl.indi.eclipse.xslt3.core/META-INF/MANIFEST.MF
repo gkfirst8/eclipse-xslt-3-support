@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: XSLT 3 Core
+Bundle-SymbolicName: nl.indi.eclipse.xslt3.core;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: INDI
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-ClassPath: .,
+ lib/Saxon-HE-12.8.jar,
+ lib/xmlresolver-5.3.3.jar,
+ lib/xmlresolver-5.3.3-data.jar
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime
+Export-Package: nl.indi.eclipse.xslt3.core
+

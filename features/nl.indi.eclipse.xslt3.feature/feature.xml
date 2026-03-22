@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="nl.indi.eclipse.xslt3.feature"
+      label="XSLT 3 Support"
+      version="0.1.0.qualifier"
+      provider-name="INDI">
+
+   <description>
+      XSLT 3.0 editing support for Eclipse backed by Saxon-HE.
+   </description>
+
+   <plugin
+         id="nl.indi.eclipse.xslt3.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="nl.indi.eclipse.xslt3.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+</feature>
+
