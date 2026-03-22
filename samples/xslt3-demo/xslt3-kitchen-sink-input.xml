@@ -1,0 +1,9 @@
+<demo:root xmlns:demo="urn:demo">
+    <demo:item kind="alpha" price="12.50">one</demo:item>
+    <demo:item kind="beta" price="9.10">two</demo:item>
+    <demo:item kind="alpha" price="7.40">three</demo:item>
+    <demo:item kind="gamma" price="18.95">four</demo:item>
+    <number>10</number>
+    <number>20</number>
+    <number>30</number>
+</demo:root>

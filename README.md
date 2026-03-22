@@ -51,6 +51,37 @@ The script:
 Use `--skip-build` if you already ran `mvn verify`.
 Use `--prepare-only` to stage `.runtime/eclipse-under-test` without launching the GUI.
 
+## Run the sample XSLT during development
+
+To run the kitchen-sink sample transformation while developing the Eclipse feature, use:
+
+```bash
+scripts/run-xslt3-demo.sh
+```
+
+This uses:
+
+- [xslt3-kitchen-sink.xsl](samples/xslt3-demo/xslt3-kitchen-sink.xsl)
+- [xslt3-kitchen-sink-input.xml](samples/xslt3-demo/xslt3-kitchen-sink-input.xml)
+- the bundled Saxon jars from `plugins/nl.indi.eclipse.xslt3.core/lib`
+
+The default output file is written to:
+
+```bash
+.runtime/xslt3-demo/xslt3-kitchen-sink-output.xml
+```
+
+By default the script also prints the transformation result to the terminal.
+
+Useful variants:
+
+```bash
+scripts/run-xslt3-demo.sh --stdout
+scripts/run-xslt3-demo.sh --no-show
+scripts/run-xslt3-demo.sh --it-main
+scripts/run-xslt3-demo.sh --output .runtime/xslt3-demo/custom-output.xml
+```
+
 ## Current scope
 
 The first implementation includes:
