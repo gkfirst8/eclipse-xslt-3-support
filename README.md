@@ -65,6 +65,7 @@ This uses:
 - [xslt3-kitchen-sink.xsl](samples/xslt3-demo/xslt3-kitchen-sink.xsl)
 - [xslt3-kitchen-sink-input.xml](samples/xslt3-demo/xslt3-kitchen-sink-input.xml)
 - the bundled Saxon jars from `plugins/nl.indi.eclipse.xslt3.core/lib`
+- the checked-in Eclipse project metadata under `samples/xslt3-demo/.project` and `samples/xslt3-demo/.settings/`
 
 The default output file is written to:
 
@@ -82,6 +83,8 @@ scripts/run-xslt3-demo.sh --no-show
 scripts/run-xslt3-demo.sh --it-main
 scripts/run-xslt3-demo.sh --output .runtime/xslt3-demo/custom-output.xml
 ```
+
+If you import `samples/xslt3-demo` into Eclipse, keep the committed project metadata intact so the sample retains its explicit UTF-8 project encoding and stays warning-free.
 
 ## Current scope
 
