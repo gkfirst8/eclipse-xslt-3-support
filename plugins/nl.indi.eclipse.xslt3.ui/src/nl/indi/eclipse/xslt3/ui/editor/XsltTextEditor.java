@@ -11,7 +11,10 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
@@ -19,6 +22,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import nl.indi.eclipse.xslt3.core.XsltValidationJob;
 import nl.indi.eclipse.xslt3.ui.outline.XsltOutlinePage;
+import nl.indi.eclipse.xslt3.ui.reference.FunctionReferenceView;
 import nl.indi.eclipse.xslt3.ui.text.ColorManager;
 import nl.indi.eclipse.xslt3.ui.text.XsltSourceViewerConfiguration;
 
@@ -47,6 +51,7 @@ public class XsltTextEditor extends TextEditor {
         super.createPartControl(parent);
         installSelectionListener();
         syncOutlineSelection();
+        showFunctionReferenceViewAsync();
     }
 
     @Override
@@ -154,7 +159,7 @@ public class XsltTextEditor extends TextEditor {
         }
     }
 
-    private IDocument getDocument() {
+    public IDocument getDocument() {
         return getDocumentProvider().getDocument(getEditorInput());
     }
 
@@ -163,5 +168,28 @@ public class XsltTextEditor extends TextEditor {
             return fileEditorInput.getFile();
         }
         return null;
+    }
+
+    private void showFunctionReferenceViewAsync() {
+        if (getSite() == null || getSite().getShell() == null) {
+            return;
+        }
+
+        Display display = getSite().getShell().getDisplay();
+        if (display == null || display.isDisposed()) {
+            return;
+        }
+
+        display.asyncExec(() -> {
+            if (getSite() == null || getSite().getPage() == null) {
+                return;
+            }
+
+            try {
+                getSite().getPage().showView(FunctionReferenceView.VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);
+            } catch (PartInitException exception) {
+                // Ignore view startup issues and keep the editor usable.
+            }
+        });
     }
 }

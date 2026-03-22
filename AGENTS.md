@@ -6,6 +6,11 @@
 - Plan filenames must include a global 3-digit sequence number and an ISO date.
 - Preferred filename format: `###-YYYY-MM-DD-short-topic-plan.md`.
 
+## Concurrent-agent workflow
+- If another agent is already working in this repository, create a dedicated `git worktree` and branch before making changes.
+- Keep task-specific plans in the active worktree's `plans/` directory so the plan follows the isolated implementation branch.
+- Do not reuse another agent's worktree or branch unless the task explicitly requires shared edits.
+
 ## Coding Style & Naming Conventions
 - Java 21 features are available; keep 4-space indentation and brace placement consistent with existing classes.
 - Lombok annotations (`@Builder`, `@Getter`) are standard; prefer them over manual boilerplate.

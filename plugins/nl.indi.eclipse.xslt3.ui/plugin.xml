@@ -20,5 +20,26 @@
             name="XSLT 3 Editor">
       </editor>
    </extension>
+   <extension point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            class="nl.indi.eclipse.xslt3.ui.reference.FunctionReferenceView"
+            id="nl.indi.eclipse.xslt3.ui.views.functionReference"
+            name="XSLT Function Reference"
+            restorable="true">
+      </view>
+   </extension>
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               closeable="true"
+               id="nl.indi.eclipse.xslt3.ui.views.functionReference"
+               moveable="true"
+               ratio="0.75"
+               relationship="bottom"
+               relative="org.eclipse.ui.editors"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
 </plugin>
-

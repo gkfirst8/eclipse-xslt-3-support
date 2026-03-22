@@ -1,0 +1,47 @@
+# lookup keys	title	signature	summary	details
+fn:abs	abs	fn:abs($arg as numeric?) as numeric?	Returns the absolute value of the supplied number.	Use when you need magnitude without preserving the original sign.
+fn:avg	avg	fn:avg($values as xs:anyAtomicType*) as xs:anyAtomicType?	Returns the arithmetic average of the supplied sequence.	The input must be a comparable numeric or duration-like sequence.
+fn:current-date	current-date	fn:current-date() as xs:date	Returns the current date from the dynamic context.	The value is stable for the duration of a single transformation or query evaluation.
+fn:current-group	current-group	fn:current-group() as item()*	Returns the members of the current xsl:for-each-group group.	It is only meaningful while group processing is active.
+fn:current-grouping-key	current-grouping-key	fn:current-grouping-key() as xs:anyAtomicType*	Returns the grouping key for the current xsl:for-each-group iteration.	Use it to label or branch on the active group.
+fn:distinct-values	distinct-values	fn:distinct-values($values as xs:anyAtomicType*) as xs:anyAtomicType*	Removes duplicate atomic values from a sequence.	The result order is implementation-dependent unless you sort afterward.
+fn:empty	empty	fn:empty($input as item()*) as xs:boolean	Returns true when the sequence is empty.	Use it for guard conditions before indexing or aggregation.
+fn:exists	exists	fn:exists($input as item()*) as xs:boolean	Returns true when the sequence contains at least one item.	It is the direct inverse of empty().
+fn:filter	filter	fn:filter($input as item()*, $predicate as function(item()) as xs:boolean) as item()*	Applies a predicate function to each item and keeps the matching items.	This is useful for functional pipelines over sequences.
+fn:fold-left	fold-left	fn:fold-left($input as item()*, $zero as item()*, $action as function(item()*, item()) as item()*) as item()*	Reduces a sequence from left to right using an accumulator function.	Use it to derive a single summary value or build a complex result.
+fn:for-each	for-each	fn:for-each($input as item()*, $action as function(item()) as item()*) as item()*	Applies a function to every item in order.	This is the functional equivalent of a simple mapping loop.
+fn:format-date	format-date	fn:format-date($value as xs:date?, $picture as xs:string) as xs:string?	Formats a date using an XSLT picture string.	The picture controls zero padding, language-sensitive rendering, and calendar details.
+fn:format-datetime	format-dateTime	fn:format-dateTime($value as xs:dateTime?, $picture as xs:string) as xs:string?	Formats a dateTime using an XSLT picture string.	Use it when rendering timestamps for human-readable output.
+fn:format-number	format-number	fn:format-number($value as numeric?, $picture as xs:string) as xs:string	Formats a numeric value according to a decimal-format picture.	Named decimal formats can further control separators and symbols.
+fn:head	head	fn:head($input as item()*) as item()?	Returns the first item in a sequence.	It is a concise alternative to $seq[1].
+fn:innermost	innermost	fn:innermost($nodes as node()*) as node()*	Returns only nodes that are not ancestors of any other supplied node.	Use it to remove redundant ancestors from a node set.
+fn:json-to-xml	json-to-xml	fn:json-to-xml($json as xs:string?) as document-node()?	Parses JSON text into the XPath/XSLT XML representation of JSON.	It is often paired with xml-to-json() for round-tripping.
+fn:lower-case	lower-case	fn:lower-case($value as xs:string?) as xs:string	Converts alphabetic characters to lower case.	The conversion follows Unicode case rules.
+map:contains	map:contains	map:contains($map as map(*), $key as xs:anyAtomicType) as xs:boolean	Returns true when the map contains the supplied key.	It does not retrieve the value; use map:get() for that.
+map:get	map:get	map:get($map as map(*), $key as xs:anyAtomicType) as item()*	Returns the value associated with a key in a map.	An absent key returns the empty sequence.
+map:keys	map:keys	map:keys($map as map(*)) as xs:anyAtomicType*	Returns the sequence of keys present in the map.	Sort the result when you need stable output order.
+fn:matches	matches	fn:matches($input as xs:string?, $pattern as xs:string) as xs:boolean	Tests whether a string matches a regular expression.	XPath regular expressions are XML Schema regexes with XPath/XSLT extensions.
+math:pi	math:pi	math:pi() as xs:double	Returns the mathematical constant pi.	Useful for trigonometric calculations in XPath and XSLT.
+math:sqrt	math:sqrt	math:sqrt($arg as xs:double?) as xs:double?	Returns the square root of the supplied number.	Negative values yield NaN under the XPath math rules.
+fn:normalize-space	normalize-space	fn:normalize-space($value as xs:string?) as xs:string	Trims leading and trailing whitespace and collapses internal whitespace runs to single spaces.	Use it when preparing display strings or normalized keys.
+fn:outermost	outermost	fn:outermost($nodes as node()*) as node()*	Returns only nodes that are not descendants of any other supplied node.	Use it to eliminate nested duplicates while keeping the highest nodes.
+fn:parse-json	parse-json	fn:parse-json($json as xs:string?) as item()?	Parses JSON text into maps, arrays, and atomic values.	This is the direct functional counterpart to json-to-xml().
+fn:path	path	fn:path($node as node()?) as xs:string?	Returns a stable path-style string for a node.	This is mainly useful for diagnostics and trace output.
+fn:qname	QName	fn:QName($uri as xs:string?, $lexical as xs:string) as xs:QName	Creates an xs:QName value from a namespace URI and lexical QName.	Use it when a QName must be constructed dynamically.
+fn:replace	replace	fn:replace($input as xs:string?, $pattern as xs:string, $replacement as xs:string) as xs:string	Replaces substrings that match a regular expression.	The replacement string supports regex group references.
+fn:resolve-uri	resolve-uri	fn:resolve-uri($relative as xs:string?, $base as xs:string?) as xs:anyURI?	Resolves a relative URI against a base URI.	This is useful for stylesheet, document, and resource resolution logic.
+fn:reverse	reverse	fn:reverse($input as item()*) as item()*	Returns the sequence in reverse order.	The items themselves are unchanged.
+fn:round-half-to-even	round-half-to-even	fn:round-half-to-even($value as numeric?, $precision as xs:integer?) as numeric?	Rounds numbers using banker's rounding.	This is often preferred for financial-style repeated rounding.
+fn:serialize	serialize	fn:serialize($input as item()*, $params as item()?) as xs:string	Serializes a value or tree using serialization parameters.	In XSLT this is useful for diagnostics or adaptive text output.
+fn:sort	sort	fn:sort($input as item()*) as item()*	Returns a sorted sequence.	Optional collation and key function arguments control locale and sort criteria.
+fn:static-base-uri	static-base-uri	fn:static-base-uri() as xs:anyURI?	Returns the static base URI in the current expression context.	Use it when resolving resources relative to the containing stylesheet module.
+fn:string-join	string-join	fn:string-join($values as xs:anyAtomicType*, $separator as xs:string) as xs:string	Joins items into one string with a separator between each item.	Items are atomized and converted to strings before joining.
+fn:subsequence	subsequence	fn:subsequence($input as item()*, $start as xs:double, $length as xs:double?) as item()*	Returns a slice of a sequence starting at a 1-based position.	Use it for paging, trimming, and windowing sequence values.
+fn:tail	tail	fn:tail($input as item()*) as item()*	Returns all items except the first one.	It is the complement of head() for simple recursive or functional flows.
+fn:tokenize	tokenize	fn:tokenize($input as xs:string?, $pattern as xs:string) as xs:string*	Splits a string into tokens using a regular expression separator.	This is frequently used for delimited text processing.
+fn:upper-case	upper-case	fn:upper-case($value as xs:string?) as xs:string	Converts alphabetic characters to upper case.	The conversion follows Unicode case rules.
+fn:xml-to-json	xml-to-json	fn:xml-to-json($input as node()?) as xs:string?	Serializes the XML representation of JSON back to JSON text.	Pair it with json-to-xml() for transformations between models.
+array:append	array:append	array:append($array as array(*), $member as item()*) as array(*)	Returns a new array with the supplied member appended.	Arrays are immutable, so the original value is unchanged.
+array:head	array:head	array:head($array as array(*)) as item()*	Returns the first member of an array.	Use it for functional array processing.
+array:size	array:size	array:size($array as array(*)) as xs:integer	Returns the number of members in an array.	It is the array equivalent of sequence counting.
+array:tail	array:tail	array:tail($array as array(*)) as array(*)	Returns a new array without its first member.	Use it alongside array:head() for recursive array algorithms.
