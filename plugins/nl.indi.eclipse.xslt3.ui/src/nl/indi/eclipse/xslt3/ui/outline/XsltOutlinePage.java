@@ -1,18 +1,19 @@
 package nl.indi.eclipse.xslt3.ui.outline;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
@@ -22,16 +23,16 @@ import nl.indi.eclipse.xslt3.ui.editor.XsltTextEditor;
 public class XsltOutlinePage extends ContentOutlinePage {
 
     private static final Object[] NO_CHILDREN = new Object[0];
-    private static final Pattern DECLARATION_PATTERN = Pattern.compile(
-        "<xsl:(template|function|variable|param|mode|accumulator|package)\\b([^>]*)"
-    );
-
-    private static final Pattern NAME_PATTERN = Pattern.compile("(name|match)\\s*=\\s*['\"]([^'\"]+)['\"]");
 
     private final XsltTextEditor editor;
+    private final XsltOutlineParser parser = new XsltOutlineParser();
     private final IDocumentListener documentListener;
     private IDocument document;
+    private XsltOutlineNode rootNode = XsltOutlineNode.root(0);
     private boolean disposed;
+    private boolean synchronizingFromEditor;
+    private boolean initialExpansionApplied;
+    private int pendingSelectionOffset = -1;
 
     public XsltOutlinePage(XsltTextEditor editor) {
         this.editor = editor;
@@ -51,7 +52,7 @@ public class XsltOutlinePage extends ContentOutlinePage {
     public void createControl(org.eclipse.swt.widgets.Composite parent) {
         super.createControl(parent);
         TreeViewer viewer = getTreeViewer();
-        viewer.setContentProvider(new FlatOutlineContentProvider());
+        viewer.setContentProvider(new OutlineContentProvider());
         viewer.setLabelProvider(new LabelProvider() {
             @Override
             public String getText(Object element) {
@@ -84,6 +85,14 @@ public class XsltOutlinePage extends ContentOutlinePage {
         refreshViewer();
     }
 
+    public void syncSelectionToOffset(int offset) {
+        if (disposed) {
+            return;
+        }
+        pendingSelectionOffset = Math.max(offset, -1);
+        syncSelection();
+    }
+
     public void disposePage() {
         disposed = true;
         if (document != null) {
@@ -94,10 +103,13 @@ public class XsltOutlinePage extends ContentOutlinePage {
 
     private ISelectionChangedListener selectionChangedListener() {
         return event -> {
+            if (synchronizingFromEditor) {
+                return;
+            }
             if (event.getSelection() instanceof IStructuredSelection selection) {
                 Object firstElement = selection.getFirstElement();
-                if (firstElement instanceof XsltOutlineNode node) {
-                    editor.revealLine(node.lineNumber());
+                if (firstElement instanceof XsltOutlineNode node && !node.isCategory()) {
+                    editor.revealRange(node.startOffset(), 0);
                 }
             }
         };
@@ -122,61 +134,135 @@ public class XsltOutlinePage extends ContentOutlinePage {
         if (viewer == null || viewer.getControl() == null || viewer.getControl().isDisposed()) {
             return;
         }
-        viewer.setInput(parseNodes());
-        viewer.expandAll();
+
+        Set<String> expandedNodeIds = expandedNodeIds(viewer);
+        rootNode = parser.parse(document);
+        viewer.setInput(rootNode);
+        restoreExpansion(viewer, expandedNodeIds);
+        syncSelection();
     }
 
-    private List<XsltOutlineNode> parseNodes() {
-        List<XsltOutlineNode> nodes = new ArrayList<>();
-        if (document == null) {
-            return nodes;
+    private Set<String> expandedNodeIds(TreeViewer viewer) {
+        return Arrays.stream(viewer.getExpandedElements())
+            .filter(XsltOutlineNode.class::isInstance)
+            .map(XsltOutlineNode.class::cast)
+            .map(XsltOutlineNode::id)
+            .collect(Collectors.toSet());
+    }
+
+    private void restoreExpansion(TreeViewer viewer, Set<String> expandedNodeIds) {
+        if (!initialExpansionApplied) {
+            viewer.expandToLevel(2);
+            initialExpansionApplied = true;
+            return;
         }
 
-        String[] lines = document.get().split("\\R", -1);
-        for (int index = 0; index < lines.length; index++) {
-            Matcher declarationMatcher = DECLARATION_PATTERN.matcher(lines[index]);
-            if (!declarationMatcher.find()) {
+        List<XsltOutlineNode> nodesToExpand = new ArrayList<>();
+        collectExpandedNodes(rootNode, expandedNodeIds, nodesToExpand);
+        viewer.setExpandedElements(nodesToExpand.toArray());
+    }
+
+    private void collectExpandedNodes(
+        XsltOutlineNode currentNode,
+        Set<String> expandedNodeIds,
+        List<XsltOutlineNode> nodesToExpand
+    ) {
+        if (expandedNodeIds.contains(currentNode.id())) {
+            nodesToExpand.add(currentNode);
+        }
+        for (XsltOutlineNode child : currentNode.children()) {
+            collectExpandedNodes(child, expandedNodeIds, nodesToExpand);
+        }
+    }
+
+    private void syncSelection() {
+        if (disposed || pendingSelectionOffset < 0) {
+            return;
+        }
+
+        TreeViewer viewer = getTreeViewer();
+        if (viewer == null || viewer.getControl() == null || viewer.getControl().isDisposed()) {
+            return;
+        }
+
+        XsltOutlineNode matchingNode = findDeepestNode(rootNode, pendingSelectionOffset);
+        Object currentSelection = null;
+        if (viewer.getSelection() instanceof IStructuredSelection selection) {
+            currentSelection = selection.getFirstElement();
+        }
+        if (matchingNode == currentSelection || (matchingNode != null && matchingNode.equals(currentSelection))) {
+            return;
+        }
+
+        synchronizingFromEditor = true;
+        try {
+            if (matchingNode == null) {
+                viewer.setSelection(StructuredSelection.EMPTY);
+                return;
+            }
+
+            expandParents(viewer, matchingNode);
+            viewer.setSelection(new StructuredSelection(matchingNode), true);
+        } finally {
+            synchronizingFromEditor = false;
+        }
+    }
+
+    private void expandParents(TreeViewer viewer, XsltOutlineNode node) {
+        XsltOutlineNode current = node.parent();
+        while (current != null && current.parent() != null) {
+            viewer.expandToLevel(current, 1);
+            current = current.parent();
+        }
+    }
+
+    private XsltOutlineNode findDeepestNode(XsltOutlineNode currentNode, int offset) {
+        for (XsltOutlineNode child : currentNode.children()) {
+            if (!child.containsOffset(offset)) {
                 continue;
             }
 
-            String declarationType = declarationMatcher.group(1);
-            String attributes = declarationMatcher.group(2);
-            String label = declarationType;
-
-            Matcher nameMatcher = NAME_PATTERN.matcher(attributes);
-            if (nameMatcher.find()) {
-                label = declarationType + ": " + nameMatcher.group(2);
+            XsltOutlineNode deeperNode = findDeepestNode(child, offset);
+            if (deeperNode != null) {
+                return deeperNode;
             }
-
-            nodes.add(new XsltOutlineNode(label, index + 1));
+            if (!child.isCategory()) {
+                return child;
+            }
         }
 
-        return nodes;
+        return null;
     }
 
-    private static final class FlatOutlineContentProvider implements ITreeContentProvider {
+    private static final class OutlineContentProvider implements ITreeContentProvider {
 
         @Override
         public Object[] getElements(Object inputElement) {
-            if (inputElement instanceof Collection<?> collection) {
-                return collection.toArray();
+            if (inputElement instanceof XsltOutlineNode node) {
+                return node.children().toArray();
             }
             return NO_CHILDREN;
         }
 
         @Override
         public Object[] getChildren(Object parentElement) {
+            if (parentElement instanceof XsltOutlineNode node) {
+                return node.children().toArray();
+            }
             return NO_CHILDREN;
         }
 
         @Override
         public Object getParent(Object element) {
+            if (element instanceof XsltOutlineNode node) {
+                return node.parent();
+            }
             return null;
         }
 
         @Override
         public boolean hasChildren(Object element) {
-            return false;
+            return element instanceof XsltOutlineNode node && node.hasChildren();
         }
     }
 }
