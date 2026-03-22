@@ -1,6 +1,7 @@
 package nl.indi.eclipse.xslt3.ui.outline;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,8 +9,7 @@ import java.util.regex.Pattern;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -21,6 +21,7 @@ import nl.indi.eclipse.xslt3.ui.editor.XsltTextEditor;
 
 public class XsltOutlinePage extends ContentOutlinePage {
 
+    private static final Object[] NO_CHILDREN = new Object[0];
     private static final Pattern DECLARATION_PATTERN = Pattern.compile(
         "<xsl:(template|function|variable|param|mode|accumulator|package)\\b([^>]*)"
     );
@@ -30,6 +31,7 @@ public class XsltOutlinePage extends ContentOutlinePage {
     private final XsltTextEditor editor;
     private final IDocumentListener documentListener;
     private IDocument document;
+    private boolean disposed;
 
     public XsltOutlinePage(XsltTextEditor editor) {
         this.editor = editor;
@@ -49,7 +51,7 @@ public class XsltOutlinePage extends ContentOutlinePage {
     public void createControl(org.eclipse.swt.widgets.Composite parent) {
         super.createControl(parent);
         TreeViewer viewer = getTreeViewer();
-        viewer.setContentProvider(ArrayContentProvider.getInstance());
+        viewer.setContentProvider(new FlatOutlineContentProvider());
         viewer.setLabelProvider(new LabelProvider() {
             @Override
             public String getText(Object element) {
@@ -64,6 +66,9 @@ public class XsltOutlinePage extends ContentOutlinePage {
     }
 
     public void setInput(IDocument newDocument) {
+        if (disposed) {
+            return;
+        }
         if (document == newDocument) {
             refreshViewer();
             return;
@@ -80,8 +85,10 @@ public class XsltOutlinePage extends ContentOutlinePage {
     }
 
     public void disposePage() {
+        disposed = true;
         if (document != null) {
             document.removeDocumentListener(documentListener);
+            document = null;
         }
     }
 
@@ -97,6 +104,9 @@ public class XsltOutlinePage extends ContentOutlinePage {
     }
 
     private void refreshAsync() {
+        if (disposed) {
+            return;
+        }
         Display display = Display.getDefault();
         if (display == null || display.isDisposed()) {
             return;
@@ -105,6 +115,9 @@ public class XsltOutlinePage extends ContentOutlinePage {
     }
 
     private void refreshViewer() {
+        if (disposed) {
+            return;
+        }
         TreeViewer viewer = getTreeViewer();
         if (viewer == null || viewer.getControl() == null || viewer.getControl().isDisposed()) {
             return;
@@ -140,5 +153,30 @@ public class XsltOutlinePage extends ContentOutlinePage {
 
         return nodes;
     }
-}
 
+    private static final class FlatOutlineContentProvider implements ITreeContentProvider {
+
+        @Override
+        public Object[] getElements(Object inputElement) {
+            if (inputElement instanceof Collection<?> collection) {
+                return collection.toArray();
+            }
+            return NO_CHILDREN;
+        }
+
+        @Override
+        public Object[] getChildren(Object parentElement) {
+            return NO_CHILDREN;
+        }
+
+        @Override
+        public Object getParent(Object element) {
+            return null;
+        }
+
+        @Override
+        public boolean hasChildren(Object element) {
+            return false;
+        }
+    }
+}
