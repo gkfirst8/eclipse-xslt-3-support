@@ -43,6 +43,7 @@ scripts/run-runtime-eclipse.sh
 The script:
 
 - builds this repo
+- retries automatically with `mvn clean verify` if an incremental Tycho build leaves missing plugin/feature/repository artifacts
 - copies `.runtime/eclipse-base` into `.runtime/eclipse-under-test`
 - overlays the freshly built feature/plugin JARs via `dropins/`
 - launches a separate Eclipse workspace in `.runtime/workspace`

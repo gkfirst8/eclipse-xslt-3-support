@@ -11,6 +11,34 @@ SOURCE_ECLIPSE_HOME="${ECLIPSE_HOME:-$LOCAL_BASE}"
 SKIP_BUILD="false"
 PREPARE_ONLY="false"
 
+require_build_output() {
+  local pattern="$1"
+
+  if compgen -G "$pattern" > /dev/null; then
+    return 0
+  fi
+
+  echo "Missing expected build output: $pattern" >&2
+  return 1
+}
+
+verify_build_outputs() {
+  require_build_output "$ROOT/plugins/nl.indi.eclipse.xslt3.core/target/nl.indi.eclipse.xslt3.core-*.jar" &&
+    require_build_output "$ROOT/plugins/nl.indi.eclipse.xslt3.ui/target/nl.indi.eclipse.xslt3.ui-*.jar" &&
+    require_build_output "$ROOT/features/nl.indi.eclipse.xslt3.feature/target/nl.indi.eclipse.xslt3.feature-*.jar" &&
+    require_build_output "$ROOT/releng/nl.indi.eclipse.xslt3.repository/target/repository/p2.index"
+}
+
+run_build() {
+  if mvn -f "$ROOT/pom.xml" verify && verify_build_outputs; then
+    return 0
+  fi
+
+  echo "Incremental Tycho build was incomplete or inconsistent. Retrying with 'mvn clean verify'." >&2
+  mvn -f "$ROOT/pom.xml" clean verify
+  verify_build_outputs
+}
+
 for argument in "$@"; do
   case "$argument" in
     --skip-build)
@@ -28,7 +56,9 @@ for argument in "$@"; do
 done
 
 if [[ "$SKIP_BUILD" != "true" ]]; then
-  mvn -f "$ROOT/pom.xml" verify
+  run_build
+else
+  verify_build_outputs
 fi
 
 if [[ ! -x "$SOURCE_ECLIPSE_HOME/eclipse" ]]; then
@@ -42,7 +72,7 @@ fi
 
 mkdir -p "$RUNTIME_DIR"
 
-if [[ ! -d "$ECLIPSE_UNDER_TEST" ]]; then
+if [[ ! -x "$ECLIPSE_UNDER_TEST/eclipse" ]]; then
   cp -a "$SOURCE_ECLIPSE_HOME" "$ECLIPSE_UNDER_TEST"
 fi
 
