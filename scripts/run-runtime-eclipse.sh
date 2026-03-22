@@ -56,6 +56,10 @@ for argument in "$@"; do
 done
 
 if [[ "$SKIP_BUILD" != "true" ]]; then
+  "$ROOT/scripts/fetch-third-party-libs.sh"
+fi
+
+if [[ "$SKIP_BUILD" != "true" ]]; then
   run_build
 else
   verify_build_outputs

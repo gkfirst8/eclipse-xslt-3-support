@@ -1,14 +1,48 @@
 # Eclipse XSLT 3.0 Support
 
-This repository bootstraps an Eclipse installable feature that adds basic XSLT 3.0 editing support backed by Saxon-HE 12.8.
+This repository builds an installable Eclipse feature that adds basic XSLT 3.0
+editing support backed by Saxon-HE 12.8.
+
+## License
+
+- Original project code and scripts: `EPL-2.0`
+- Third-party dependencies: see `THIRD-PARTY.md`
 
 ## Modules
 
 - `plugins/nl.indi.eclipse.xslt3.core`: validation and Saxon integration
-- `plugins/nl.indi.eclipse.xslt3.ui`: editor, syntax coloring, outline, and content assist
+- `plugins/nl.indi.eclipse.xslt3.ui`: editor, syntax coloring, outline, content assist, and function reference view
 - `features/nl.indi.eclipse.xslt3.feature`: installable Eclipse feature
-- `releng/nl.indi.eclipse.xslt3.repository`: p2/update-site repository
+- `releng/nl.indi.eclipse.xslt3.repository`: p2 update-site repository
 - `releng/nl.indi.eclipse.xslt3.target`: Tycho target definition
+
+## Prerequisites
+
+Supported publication baseline:
+
+- Ubuntu x86_64
+- Java 21 on `PATH`
+- Maven on `PATH`
+- An existing Eclipse installation available through `ECLIPSE_SOURCE_HOME`,
+  `ECLIPSE_HOME`, `--source`, or `eclipse` on `PATH`
+
+Check the local environment with:
+
+```bash
+scripts/check-prereqs.sh
+```
+
+## Fetch third-party jars
+
+The repo can work with the bundled jars currently checked in under
+`plugins/nl.indi.eclipse.xslt3.core/lib/`.
+
+If you want to rebuild those jars from Maven artifacts instead of relying on
+the checked-in binaries, run:
+
+```bash
+scripts/fetch-third-party-libs.sh
+```
 
 ## Build
 
@@ -16,64 +50,32 @@ This repository bootstraps an Eclipse installable feature that adds basic XSLT 3
 mvn verify
 ```
 
-## Install a repo-local Eclipse base
+## Run the inspection Eclipse
 
-This repository can keep its own local Eclipse installation under `.runtime/eclipse-base`.
-
-To copy a local Eclipse installation into the repo-managed runtime area, run:
+Install a repo-local Eclipse base:
 
 ```bash
 scripts/install-local-eclipse.sh
 ```
 
-By default the script uses:
-
-- `ECLIPSE_SOURCE_HOME`, if set
-- otherwise `ECLIPSE_HOME`, if set
-- otherwise the machine-local installation at `${ECLIPSE_SOURCE_HOME}`, if present
-
-## Run the inspection Eclipse
-
-Once the local base exists, run:
+Then launch the runtime Eclipse:
 
 ```bash
 scripts/run-runtime-eclipse.sh
 ```
 
-The script:
+Helpful variants:
 
-- builds this repo
-- retries automatically with `mvn clean verify` if an incremental Tycho build leaves missing plugin/feature/repository artifacts
-- copies `.runtime/eclipse-base` into `.runtime/eclipse-under-test`
-- overlays the freshly built feature/plugin JARs via `dropins/`
-- launches a separate Eclipse workspace in `.runtime/workspace`
+```bash
+scripts/run-runtime-eclipse.sh --skip-build
+scripts/run-runtime-eclipse.sh --prepare-only
+```
 
-`ECLIPSE_HOME` still overrides the repo-local base if you want to launch from another installation.
-Use `--skip-build` if you already ran `mvn verify`.
-Use `--prepare-only` to stage `.runtime/eclipse-under-test` without launching the GUI.
-
-## Run the sample XSLT during development
-
-To run the kitchen-sink sample transformation while developing the Eclipse feature, use:
+## Run the sample transformation
 
 ```bash
 scripts/run-xslt3-demo.sh
 ```
-
-This uses:
-
-- [xslt3-kitchen-sink.xsl](samples/xslt3-demo/xslt3-kitchen-sink.xsl)
-- [xslt3-kitchen-sink-input.xml](samples/xslt3-demo/xslt3-kitchen-sink-input.xml)
-- the bundled Saxon jars from `plugins/nl.indi.eclipse.xslt3.core/lib`
-- the checked-in Eclipse project metadata under `samples/xslt3-demo/.project` and `samples/xslt3-demo/.settings/`
-
-The default output file is written to:
-
-```bash
-.runtime/xslt3-demo/xslt3-kitchen-sink-output.xml
-```
-
-By default the script also prints the transformation result to the terminal.
 
 Useful variants:
 
@@ -84,22 +86,56 @@ scripts/run-xslt3-demo.sh --it-main
 scripts/run-xslt3-demo.sh --output .runtime/xslt3-demo/custom-output.xml
 ```
 
-If you import `samples/xslt3-demo` into Eclipse, keep the committed project metadata intact so the sample retains its explicit UTF-8 project encoding and stays warning-free.
+## Prepare a p2 update site
+
+To build and stage the p2 repository for local testing or GitHub Pages
+publication:
+
+```bash
+scripts/prepare-p2-site.sh
+```
+
+By default the staged site is written to `.site/p2/`.
+
+## Publish on GitHub
+
+Recommended public distribution flow:
+
+1. Push the repository to GitHub.
+2. Enable GitHub Pages for the repository.
+3. Use the included GitHub Actions workflows to:
+   - run CI on pushes and pull requests
+   - publish the Tycho-generated p2 repository on release tags
+4. Share the public update-site URL:
+
+```text
+https://<github-owner>.github.io/<repo-name>/
+```
+
+## Install in Eclipse
+
+Once the update site is published, Eclipse users can install it through:
+
+1. `Help`
+2. `Install New Software...`
+3. `Add...`
+4. Enter the public update-site URL
+5. Select `XSLT 3 Support`
 
 ## Current scope
 
-The first implementation includes:
+Implemented:
 
-- file association for `*.xsl` and `*.xslt`
-- a dedicated XSLT editor
-- basic XSLT/XML syntax coloring
-- outline entries for common top-level XSLT declarations
-- simple XSLT element content assist
+- XSLT editor for `*.xsl` and `*.xslt`
 - validation on save using Saxon-HE
+- outline for common top-level declarations
+- simple XSLT element content assist
+- function reference view for bundled XSLT/XPath function docs
+- installable Eclipse feature plus p2 update site
 
-Not yet implemented:
+Deferred:
 
 - debugger integration
 - formatter
 - full semantic navigation/refactoring
-- deep reuse of the historic WTP XSL source bundles
+- Eclipse Marketplace catalog entry

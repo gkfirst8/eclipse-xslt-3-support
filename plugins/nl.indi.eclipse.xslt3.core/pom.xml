@@ -12,5 +12,36 @@
 
     <artifactId>nl.indi.eclipse.xslt3.core</artifactId>
     <packaging>eclipse-plugin</packaging>
-</project>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <condition property="xslt3.thirdparty.libs.present">
+                                    <and>
+                                        <available file="${project.basedir}/lib/Saxon-HE-12.8.jar"/>
+                                        <available file="${project.basedir}/lib/xmlresolver-5.3.3.jar"/>
+                                        <available file="${project.basedir}/lib/xmlresolver-5.3.3-data.jar"/>
+                                    </and>
+                                </condition>
+                                <fail unless="xslt3.thirdparty.libs.present">
+                                    Missing third-party jars under plugins/nl.indi.eclipse.xslt3.core/lib.
+                                    Run scripts/fetch-third-party-libs.sh before building.
+                                </fail>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

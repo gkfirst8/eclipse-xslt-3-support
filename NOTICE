@@ -1,0 +1,9 @@
+Eclipse XSLT 3.0 Support
+Copyright (c) 2026 Contributors
+
+This repository's original source code and scripts are intended to be
+published under the Eclipse Public License 2.0. See LICENSE.
+
+The repository also makes use of third-party dependencies and external
+platform content. Redistribution details and upstream license references
+are documented in THIRD-PARTY.md.

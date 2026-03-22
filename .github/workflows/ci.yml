@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Check for hard-coded paths
+        run: scripts/check-hardcoded-paths.sh
+
+      - name: Fetch third-party jars
+        run: scripts/fetch-third-party-libs.sh
+
+      - name: Build repository
+        run: mvn verify

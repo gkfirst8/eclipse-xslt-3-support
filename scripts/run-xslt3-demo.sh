@@ -14,6 +14,8 @@ WRITE_TO_STDOUT="false"
 USE_INITIAL_TEMPLATE="false"
 SHOW_OUTPUT="true"
 
+"$ROOT/scripts/fetch-third-party-libs.sh" > /dev/null
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --xsl)
