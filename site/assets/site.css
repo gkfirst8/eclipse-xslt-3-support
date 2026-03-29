@@ -1,0 +1,363 @@
+:root {
+  --paper: #f7f1e3;
+  --paper-deep: #efe5d1;
+  --ink: #1a2433;
+  --muted: #4c5a6c;
+  --accent: #0f766e;
+  --accent-soft: #d7efe9;
+  --sun: #d4881c;
+  --sun-soft: #f8dfb6;
+  --edge: rgba(26, 36, 51, 0.12);
+  --shadow: 0 24px 50px rgba(20, 32, 43, 0.12);
+  --radius: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background:
+      radial-gradient(circle at top left, rgba(212, 136, 28, 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(15, 118, 110, 0.18), transparent 28%),
+      linear-gradient(180deg, #fbf7ef 0%, #f3ecdc 100%);
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.16em;
+}
+
+code,
+strong {
+  color: inherit;
+}
+
+code {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.95em;
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 72px;
+}
+
+.page-glow {
+  position: fixed;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.page-glow-left {
+  top: -120px;
+  left: -80px;
+  background: rgba(212, 136, 28, 0.22);
+}
+
+.page-glow-right {
+  top: 80px;
+  right: -120px;
+  background: rgba(15, 118, 110, 0.18);
+}
+
+.panel {
+  background: rgba(255, 252, 246, 0.88);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.hero {
+  padding: 38px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  line-height: 1.05;
+  margin: 0;
+}
+
+h1 {
+  max-width: 12ch;
+  font-size: clamp(2.8rem, 4vw, 4.6rem);
+}
+
+h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+h3 {
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+}
+
+.lead {
+  margin: 20px 0 0;
+  max-width: 40rem;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+.body-copy,
+.note,
+.callout-note,
+.shot-card p,
+.troubleshooting-list,
+.feature-list,
+.link-list,
+.steps {
+  margin: 0;
+  color: var(--muted);
+}
+
+.callout {
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(15, 118, 110, 0.12), rgba(15, 118, 110, 0.04));
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 20px;
+}
+
+.callout-label {
+  margin: 0 0 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+
+.callout code {
+  display: block;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 118, 110, 0.15);
+  border-radius: 16px;
+  overflow-wrap: anywhere;
+}
+
+.callout-note {
+  margin-top: 12px;
+}
+
+.section-heading {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.shell > .panel,
+.feature-strip {
+  margin-top: 22px;
+}
+
+.shell > .panel:not(.hero) {
+  padding: 30px 32px;
+}
+
+.steps {
+  padding-left: 24px;
+  display: grid;
+  gap: 8px;
+}
+
+.note {
+  margin-top: 16px;
+}
+
+.shot-grid,
+.feature-strip {
+  display: grid;
+  gap: 22px;
+}
+
+.shot-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 22px;
+}
+
+.shot-card {
+  display: grid;
+  gap: 16px;
+}
+
+.shot-frame {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  padding: 18px;
+  border-radius: 22px;
+  background:
+      linear-gradient(140deg, rgba(15, 118, 110, 0.12), rgba(212, 136, 28, 0.1)),
+      var(--paper);
+  border: 1px solid rgba(26, 36, 51, 0.1);
+}
+
+.shot-browser {
+  height: 18px;
+  width: 84px;
+  border-radius: 999px;
+  background:
+      radial-gradient(circle at 12px 9px, rgba(212, 136, 28, 0.9) 0 4px, transparent 4px),
+      radial-gradient(circle at 34px 9px, rgba(15, 118, 110, 0.9) 0 4px, transparent 4px),
+      radial-gradient(circle at 56px 9px, rgba(26, 36, 51, 0.45) 0 4px, transparent 4px);
+}
+
+.shot-lines,
+.shot-layout {
+  display: grid;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.shot-lines .line,
+.shot-layout .pane {
+  display: block;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(26, 36, 51, 0.1);
+}
+
+.shot-lines .line {
+  height: 30px;
+}
+
+.shot-lines .line.wide {
+  width: 100%;
+}
+
+.shot-lines .line {
+  width: 72%;
+}
+
+.shot-lines .line.short {
+  width: 52%;
+}
+
+.shot-layout {
+  grid-template-columns: 1.4fr 0.8fr;
+  grid-template-rows: 110px 68px;
+}
+
+.shot-layout .pane-wide {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+}
+
+.shot-layout .pane-tall {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.shot-placeholder {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(26, 36, 51, 0.84);
+  color: #fff7ea;
+  font-size: 0.86rem;
+}
+
+.feature-strip {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.accent-panel {
+  padding: 28px 30px;
+  background:
+      linear-gradient(180deg, rgba(212, 136, 28, 0.12), rgba(212, 136, 28, 0.05)),
+      rgba(255, 252, 246, 0.92);
+}
+
+.info-panel {
+  padding: 28px 30px;
+  background:
+      linear-gradient(180deg, rgba(15, 118, 110, 0.12), rgba(15, 118, 110, 0.05)),
+      rgba(255, 252, 246, 0.92);
+}
+
+.feature-list,
+.link-list,
+.troubleshooting-list {
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .hero-grid,
+  .shot-grid,
+  .feature-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 28px;
+  }
+
+  .shell > .panel:not(.hero),
+  .accent-panel,
+  .info-panel {
+    padding: 24px;
+  }
+
+  h1 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .shell {
+    width: min(100% - 18px, 1100px);
+    padding: 18px 0 40px;
+  }
+
+  .hero,
+  .shell > .panel:not(.hero),
+  .accent-panel,
+  .info-panel {
+    border-radius: 20px;
+  }
+
+  .shot-frame {
+    min-height: 220px;
+  }
+}

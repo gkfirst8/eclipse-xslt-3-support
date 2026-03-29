@@ -139,6 +139,9 @@ https://gkfirst8.github.io/eclipse-xslt-3-support/
 4. Enter the public update-site URL
 5. Select `XSLT 3 Support`
 
+The same URL now also serves a browser landing page with installation notes,
+troubleshooting hints, and links to the raw p2 repository files.
+
 ## Current scope
 
 Implemented:

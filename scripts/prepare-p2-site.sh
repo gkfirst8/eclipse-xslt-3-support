@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_DIR="$ROOT/.site/p2"
 SKIP_BUILD="false"
+LANDING_PAGE_DIR="$ROOT/site"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -38,5 +39,9 @@ fi
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 cp -a "$SOURCE_REPOSITORY/." "$OUTPUT_DIR/"
+
+if [[ -d "$LANDING_PAGE_DIR" ]]; then
+  cp -a "$LANDING_PAGE_DIR/." "$OUTPUT_DIR/"
+fi
 
 echo "Prepared p2 site at $OUTPUT_DIR"
