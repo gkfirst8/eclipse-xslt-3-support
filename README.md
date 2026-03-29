@@ -127,6 +127,12 @@ https://<github-owner>.github.io/<repo-name>/
 
 Once the update site is published, Eclipse users can install it through:
 
+Public update-site URL:
+
+```text
+https://gkfirst8.github.io/eclipse-xslt-3-support/
+```
+
 1. `Help`
 2. `Install New Software...`
 3. `Add...`
