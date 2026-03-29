@@ -1,0 +1,50 @@
+Eclipse XSLT 3 Core
+Third-Party Notices
+
+This plug-in redistributes the following third-party runtime artifacts:
+
+1. Saxon-HE 12.8
+   - Artifact: net.sf.saxon:Saxon-HE:12.8
+   - License: Mozilla Public License 2.0
+   - Binary included here as: lib/Saxon-HE-12.8.jar
+   - Source form availability:
+     - Maven Central sources artifact:
+       net.sf.saxon:Saxon-HE:12.8:jar:sources
+     - Maven Central release directory:
+       https://repo1.maven.org/maven2/net/sf/saxon/Saxon-HE/12.8/
+     - Upstream project and license information:
+       https://www.saxonica.com/html/documentation12/conditions/index.html
+
+2. xmlresolver 5.3.3
+   - Artifact: org.xmlresolver:xmlresolver:5.3.3
+   - License: Apache License 2.0
+   - Binary included here as: lib/xmlresolver-5.3.3.jar
+   - Source form availability:
+     - Maven Central sources artifact:
+       org.xmlresolver:xmlresolver:5.3.3:jar:sources
+     - Maven Central release directory:
+       https://repo1.maven.org/maven2/org/xmlresolver/xmlresolver/5.3.3/
+     - Upstream source repository:
+       https://github.com/xmlresolver/xmlresolver
+
+3. xmlresolver data bundle 5.3.3
+   - Artifact: org.xmlresolver:xmlresolver:5.3.3:jar:data
+   - License: Apache License 2.0
+   - Binary included here as: lib/xmlresolver-5.3.3-data.jar
+   - Source form availability:
+     - Maven Central release directory:
+       https://repo1.maven.org/maven2/org/xmlresolver/xmlresolver/5.3.3/
+     - Upstream source repository:
+       https://github.com/xmlresolver/xmlresolver
+
+Project source code
+   - The original source code and build scripts for Eclipse XSLT 3.0 Support
+     are distributed under the Eclipse Public License 2.0.
+   - The project source repository and release source archives that accompany
+     this distribution provide the preferred form for making modifications to
+     the original project code.
+
+Packaged legal files
+   - legal/MPL-2.0.txt
+   - legal/Apache-2.0.txt
+   - legal/THIRD-PARTY-NOTICES.txt

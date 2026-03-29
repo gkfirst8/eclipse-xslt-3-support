@@ -1,9 +1,16 @@
 Eclipse XSLT 3.0 Support
 Copyright (c) 2026 Contributors
 
-This repository's original source code and scripts are intended to be
-published under the Eclipse Public License 2.0. See LICENSE.
+The original source code and build scripts in this repository are distributed
+under the Eclipse Public License 2.0. See LICENSE.
 
-The repository also makes use of third-party dependencies and external
-platform content. Redistribution details and upstream license references
-are documented in THIRD-PARTY.md.
+The Eclipse feature built from this repository packages the EPL-2.0 feature
+license text as `epl-2.0.html`.
+
+The core Eclipse plug-in built from this repository redistributes Saxon-HE
+12.8, xmlresolver 5.3.3, and the xmlresolver 5.3.3 data bundle. Packaged
+third-party license texts and attribution notices are included under the
+plug-in `legal/` directory.
+
+Redistribution details, source availability references, and upstream license
+references are documented in THIRD-PARTY.md.

@@ -4,6 +4,8 @@ Bundle-Name: XSLT 3 UI
 Bundle-SymbolicName: nl.indi.eclipse.xslt3.ui;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: INDI
+Bundle-Copyright: Copyright (c) 2026 Contributors
+Bundle-License: https://www.eclipse.org/legal/epl-2.0/
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: nl.indi.eclipse.xslt3.core,
  org.eclipse.core.resources,
@@ -18,4 +20,3 @@ Require-Bundle: nl.indi.eclipse.xslt3.core,
 Export-Package: nl.indi.eclipse.xslt3.ui.editor,
  nl.indi.eclipse.xslt3.ui.outline,
  nl.indi.eclipse.xslt3.ui.text
-

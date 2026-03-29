@@ -5,8 +5,12 @@ editing support backed by Saxon-HE 12.8.
 
 ## License
 
-- Original project code and scripts: `EPL-2.0`
-- Third-party dependencies: see `THIRD-PARTY.md`
+- Original project code and scripts are distributed under `EPL-2.0`.
+- The built Eclipse feature packages `epl-2.0.html` as the installable feature
+  license text.
+- The built core plug-in packages third-party notices and license texts under
+  `plugins/nl.indi.eclipse.xslt3.core/legal/`.
+- Third-party redistribution details: see `THIRD-PARTY.md`.
 
 ## Modules
 
@@ -36,6 +40,13 @@ scripts/check-prereqs.sh
 
 The repo can work with the bundled jars currently checked in under
 `plugins/nl.indi.eclipse.xslt3.core/lib/`.
+
+The built core plug-in redistributes these jars together with:
+
+- `about.html`
+- `legal/MPL-2.0.txt`
+- `legal/Apache-2.0.txt`
+- `legal/THIRD-PARTY-NOTICES.txt`
 
 If you want to rebuild those jars from Maven artifacts instead of relying on
 the checked-in binaries, run:

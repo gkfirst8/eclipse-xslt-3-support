@@ -31,3 +31,6 @@ jobs:
 
       - name: Build repository
         run: mvn verify
+
+      - name: Check legal compliance
+        run: scripts/check-legal-compliance.sh

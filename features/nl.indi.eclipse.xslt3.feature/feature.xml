@@ -9,6 +9,16 @@
       XSLT 3.0 editing support for Eclipse backed by Saxon-HE.
    </description>
 
+   <copyright>
+      Copyright (c) 2026 Contributors.
+   </copyright>
+
+   <license url="epl-2.0.html">
+      This feature's original source code and scripts are distributed under
+      the Eclipse Public License 2.0. A copy of the license is packaged with
+      this feature.
+   </license>
+
    <plugin
          id="nl.indi.eclipse.xslt3.core"
          download-size="0"
@@ -23,4 +33,3 @@
          version="0.0.0"
          unpack="false"/>
 </feature>
-

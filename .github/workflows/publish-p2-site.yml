@@ -38,6 +38,9 @@ jobs:
       - name: Build and stage p2 site
         run: scripts/prepare-p2-site.sh --output public
 
+      - name: Check legal compliance
+        run: scripts/check-legal-compliance.sh
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
